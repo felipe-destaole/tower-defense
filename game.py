@@ -1,6 +1,6 @@
 import pygame
 import os
-# from inimigos.gato import Gato
+from inimigos.gato import Gato
 
 class Game:
     def __init__(self, win):
@@ -27,12 +27,10 @@ class Game:
                     run = False
             self.draw()
         
+            for gato in self.gatos:
+                gato.move()
         pygame.quit()
-    
-    def move(self):
-        for gato in self.gatos:
-            gato.move()
-    
+
 if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1350, 700))

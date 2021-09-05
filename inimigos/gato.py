@@ -1,6 +1,9 @@
 import pygame
-from inimigo import Inimigo
 import os
+import pathlib
+from .inimigo import Inimigo
+
+path = pathlib.path(__file__)
 
 gato_0 = pygame.image.load(os.path.join('imagens','tile_000.png')).convert_alpha()
 gato_1 = pygame.image.load(os.path.join('imagens','tile_001.png')).convert_alpha()
