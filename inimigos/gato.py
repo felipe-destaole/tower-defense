@@ -1,20 +1,21 @@
 import pygame
-from inimigo import Inimigo
 import os
+from .inimigo import Inimigo
 
-gato_0 = pygame.image.load(os.path.join('imagens','tile_000.png')).convert_alpha()
-gato_1 = pygame.image.load(os.path.join('imagens','tile_001.png')).convert_alpha()
-gato_2 = pygame.image.load(os.path.join('imagens','tile_002.png')).convert_alpha()
-gato_3 = pygame.image.load(os.path.join('imagens','tile_003.png')).convert_alpha()
-gato_4 = pygame.image.load(os.path.join('imagens','tile_004.png')).convert_alpha()
-gato_5 = pygame.image.load(os.path.join('imagens','tile_005.png')).convert_alpha()
+
+imgs = []
+for x in range(6):
+    nome_arquivo = 'tile{:0>3}.png'.format(str(x))
+    imgs.append(pygame.transform.scale(
+        pygame.image.load(os.path.join("imagens/inimigos/gato", nome_arquivo)),
+        (64, 64)))
 
 class Gato(Inimigo):
     def __init__(self):
+        super().__init__()
         self.width = 64
         self.height = 64
-        self.animation_count = 0
-        self.images = [gato_1,gato_2,gato_3,gato_4,gato_5,gato_0]
-        self.image = gato_1
+        self.images = imgs
+        self.image = imgs[0]
         self.max_health = 100
         self.vel = 3
