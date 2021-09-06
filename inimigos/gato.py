@@ -19,3 +19,4 @@ class Gato(Inimigo):
         self.image = imgs[0]
         self.max_health = 100
         self.vel = 3
+        self.flipped = True

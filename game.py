@@ -2,6 +2,7 @@ import pygame
 import os
 from inimigos.gato import Gato
 
+VERMELHO = (255, 0, 0)
 class Game:
     def __init__(self, win):
         self.w = 1350
@@ -11,11 +12,16 @@ class Game:
         self.bg = pygame.transform.scale(self.bg, (self.w, self.h))
         gato = Gato()
         self.gatos: list[Gato] = [gato]
+        self.pontos = []
 
     def draw(self):
         self.win.blit(self.bg, (0,0))
         for gato in self.gatos:
             gato.draw(win)
+            
+        for ponto in self.pontos:
+            pygame.draw.circle(self.win, VERMELHO, ponto, 5)
+            
 
         pygame.display.update()
         
@@ -28,6 +34,12 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                    
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
+                    self.pontos.append(pos)
+                    print(self.pontos)
+                                        
             self.draw()
         
             for gato in self.gatos:
