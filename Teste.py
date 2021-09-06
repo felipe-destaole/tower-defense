@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 pygame.font.init()
 
 from pygame import draw
@@ -14,6 +15,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+ORANGE = (255, 69, 0)
 FPS = 60
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 44
 VEL = 10
@@ -37,7 +39,10 @@ BULLET_VEL = 15
 MAX_BULLETS = 300
 YELLOW_HIT = pygame.USEREVENT + 1
 RED_HIT = pygame.USEREVENT + 2
+POWER_UP_YELLOW = pygame.USEREVENT + 3
+POWER_UP_RED = pygame.USEREVENT + 4
 
+POWER_UP = pygame.Rect(-100, -100, POWER_UP_WIDTH, POWER_UP_HEIGTH)
 
 def yellow_handle_movement(keys_pressed, yellow):
     keys_pressed = pygame.key.get_pressed()
@@ -53,6 +58,15 @@ def yellow_handle_movement(keys_pressed, yellow):
         keys_pressed[pygame.K_s] and yellow.y + VEL + yellow.height < HEIGTH - 5
     ):  # BAIXO
         yellow.y += VEL
+    global POWER_UP
+    if yellow.colliderect(POWER_UP):
+        POWER_UP = pygame.Rect(-100, -100, POWER_UP_WIDTH, POWER_UP_HEIGTH)
+        pygame.event.post(pygame.event.Event(POWER_UP_YELLOW))
+    
+                
+
+            
+            
 
 
 def red_handle_movement(keys_pressed, red):
@@ -65,6 +79,11 @@ def red_handle_movement(keys_pressed, red):
         red.y -= VEL
     if keys_pressed[pygame.K_DOWN] and red.y + VEL + red.height < HEIGTH - 5:  # BAIXO
         red.y += VEL
+    global POWER_UP
+    if red.colliderect(POWER_UP):
+        POWER_UP = pygame.Rect(-100, -100, POWER_UP_WIDTH, POWER_UP_HEIGTH)
+        pygame.event.post(pygame.event.Event(POWER_UP_RED))
+    
 
 
 def handle_bullets(yellow_bullets, red_bullets, yellow, red):
@@ -87,15 +106,28 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
 
 def draw_window(red, yellow, red_bullets, yellow_bullets, yellow_health, red_health):
     WIN.blit(SPACE, (0, 0))
+    
     pygame.draw.rect(WIN, BLACK, BORDER)
+    
     red_health_text = HEALTH_FONT.render("health " + str(red_health), 1, WHITE)
     yellow_health_text = HEALTH_FONT.render("health " + str(yellow_health), 1, WHITE)
+    
     WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
     WIN.blit(yellow_health_text, (10, 10))
+    
+    global POWER_UP
+    if POWER_UP.x <=0 :
+        POWER_UP.x, POWER_UP.y = random.randint(0, WIDTH - POWER_UP_WIDTH), random.randint(0, HEIGTH - POWER_UP_HEIGTH)
+        
+        
+    pygame.draw.rect(WIN, ORANGE, POWER_UP)
+    
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
+
     for bullet in red_bullets:
         pygame.draw.rect(WIN, RED, bullet)
+
     for bullet in yellow_bullets:
         pygame.draw.rect(WIN, YELLOW, bullet)
 
@@ -111,6 +143,7 @@ def draw_winner(text):
 def main():
     red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    power_up_num = []
     red_bullets = []
     yellow_bullets = []
     red_health = 10
@@ -141,8 +174,14 @@ def main():
             if event.type == RED_HIT:
                 red_health -= 1
                 
+            if event.type == POWER_UP_RED:
+                red_health += 1
+                
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
+                
+            if event.type == POWER_UP_YELLOW:
+                yellow_health += 1
                 
             winner_text = ""    
             
@@ -156,7 +195,6 @@ def main():
             if winner_text != "":
                 draw_winner(winner_text)
                 main()
-                
                 
                 
         keys_pressed = pygame.key.get_pressed()
