@@ -35,6 +35,7 @@ RED_SPACESHIP = pygame.transform.rotate(
 )
 
 HEART_IMAGE = pygame.image.load(os.path.join("assets", "Heart.png"))
+HEART = pygame.transform.rotate(pygame.transform.scale(HEART_IMAGE, (POWER_UP_WIDTH, POWER_UP_HEIGTH)), 0)
 SPACE = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "space.png")), (WIDTH, HEIGTH))
 BORDER = pygame.Rect(WIDTH // 2 - 10, 0, 10, HEIGTH)
 BULLET_VEL = 15
@@ -116,7 +117,7 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, yellow_health, red_hea
     if POWER_UP.x <=0 :
         POWER_UP.x, POWER_UP.y = random.randint(0, WIDTH - POWER_UP_WIDTH), random.randint(0, HEIGTH - POWER_UP_HEIGTH)
         
-    WIN.blit(HEART_IMAGE, (POWER_UP.x, POWER_UP.y))    
+    WIN.blit(HEART, (POWER_UP.x, POWER_UP.y))    
     
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
