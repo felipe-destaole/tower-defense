@@ -33,6 +33,8 @@ RED_SPACESHIP = pygame.transform.rotate(
     pygame.transform.scale(RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)),
     270,
 )
+
+HEART_IMAGE = pygame.image.load(os.path.join("assets", "Heart.png"))
 SPACE = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "space.png")), (WIDTH, HEIGTH))
 BORDER = pygame.Rect(WIDTH // 2 - 10, 0, 10, HEIGTH)
 BULLET_VEL = 15
@@ -63,11 +65,6 @@ def yellow_handle_movement(keys_pressed, yellow):
         POWER_UP = pygame.Rect(-100, -100, POWER_UP_WIDTH, POWER_UP_HEIGTH)
         pygame.event.post(pygame.event.Event(POWER_UP_YELLOW))
     
-                
-
-            
-            
-
 
 def red_handle_movement(keys_pressed, red):
     keys_pressed = pygame.key.get_pressed()
@@ -119,8 +116,7 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, yellow_health, red_hea
     if POWER_UP.x <=0 :
         POWER_UP.x, POWER_UP.y = random.randint(0, WIDTH - POWER_UP_WIDTH), random.randint(0, HEIGTH - POWER_UP_HEIGTH)
         
-        
-    pygame.draw.rect(WIN, ORANGE, POWER_UP)
+    WIN.blit(HEART_IMAGE, (POWER_UP.x, POWER_UP.y))    
     
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
